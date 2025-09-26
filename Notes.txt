@@ -1,0 +1,133 @@
+- Install Dev Dep:
+> npm init -y
+> npm i -D @egoist/tailwindcss-icons @iconify-json/material-symbols browser-sync concurrently prettier-plugin-tailwindcss tailwind css
+
+- Setup tailwind v3.4.17
+> npm install -D tailwindcss@3.4.1 / npm install -D tailwindcss@3
+> npx tailwindcss init
+> Tambahkan file (folder)src>input.css(nama file)
+masukkan kode ini didalam css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+> Tambahkan file (folder)src>index.html(nama file)
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./output.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h1 class="text-3xl font-bold underline">Hello world!</h1>
+  </body>
+</html>
+> Terminal bash : npx tailwindcss -i ./src/input.css -o ./src/output.css --watch
+> buat folder dist dan isi dengan file index.html -> untuk kodenya ambil dari src/index.html. jika sudah hapus filenya
+> buat folder assets didalam folder dist
+> isi folder assets dengan 3 folder yaitu css,images,js.
+> ubah isi tailwind.config.js dari
+  content: ["./src/**/*.{html,js}"],
+  Menjadi
+  content: ["./dist/**/*.{html,js}"],
+> terminal bash : npx tailwindcss -i ./src/input.css -o ./dist/assets/css/output.css --watch (fungsinya untuk mengecek atau menjalankan filenya)
+> ubah isi index.html di folder dist
+dari
+href="./output.css"
+Menjadi
+href="assets/css/output.css"
+
+- Setup prettier
+> buat file .prettierrc (folder luar(E-Wallet))
+
+- Setup scripts
+> edit file package.json
+dari
+"test": "echo \"Error: no test specified\" && exit 1"
+menjadi
+ "dev": "concurrently \"browser-sync start --server dist --files dist --port 3000\" \"npx tailwindcss -i src/input.css -o dist/assets/css/main.css --watch\" ",
+    "build": "npx tailwindcss -i src/input.css -o dist/assets/css/main.css --minify"
+
+untuk menjalankannya : terminal bash > npm run dev
+jangan lupa edit isi index.html
+dari
+<link href="./output.css" rel="stylesheet" />
+menjadi
+<link href="assets/css/main.css" rel="stylesheet" />
+jika ada file output.css hapus saja
+
+> Costum style
+edit isi file tailwind.config.js
+dari
+plugins: [],
+menjadi
+plugins: [
+    iconsPlugin({
+      collections: getIconCollections(['material-symbols']),
+    }),
+  ],
+
+edit lagi isi file tailwind.config.js
+dari
+theme: {
+    extend: {},
+  },
+menjadi => (fungsinya untuk secara default class container rata tengah)
+theme: {
+    container: {
+      center: true,
+    },
+    extend: {},
+  },
+
+edit lagi isi file tailwind.config.js
+dari
+extend: {},
+menjadi
+extend: {
+      animation: {
+        'slide-top': 'slide-top .5s cubic-bezier(.57,.14,0,1.07) both',
+        'slide-bottom': 'slide-bottom 1s cubic-bezier(.57,.14,0,1.07) both',
+      },
+      keyframes: {
+        'slide-top': {
+          '0%': {
+            '-webkit-transform': 'translateY(100%)',
+            transform: 'translateY(100%)',
+          },
+          '100%': {
+            '-webkit-transform': 'translateY(0)',
+            transform: 'translateY(0)',
+          },
+        },
+        'slide-bottom': {
+          '0%': {
+            '-webkit-transform': 'translateY(0)',
+            transform: 'translateY(0)',
+          },
+          '100%': {
+            '-webkit-transform': 'translateY(100%)',
+            transform: 'translateY(100%)',
+          },
+        },
+      },
+      fontSize: {
+        'icon-sm': '20px',
+        'icon-md': '24px',
+        'icon-lg': '28px',
+        'icon-xl': '32px',
+      },
+      colors: {
+        brands: {
+          'dark-green': '#118871',
+          'light-green': '#15AB8E',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        brand: ['Red Rose', 'serif'],
+      },
+    },
+  },
+
+untuk menjalankannya program: terminal bash > npm run dev
